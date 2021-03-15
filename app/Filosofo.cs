@@ -20,7 +20,7 @@ namespace filosofos
 			catch(ThreadStateException tse){
 				string errMotivation = Status == 'P' ? "starve" : "ate a lot";
 				Console.WriteLine($"\n {this} {errMotivation} because {tse?.Message}! \n Call ambulance now....🚑");
-				Environment.Exit(1);
+				throw;
 			}
 		}
 		public void Stop(){
@@ -42,12 +42,12 @@ namespace filosofos
 			if(HashiCount < 2 && Program.totalHashis < 2) return;
 			Status = 'E';
 			Program.filosofosComendo += 1;
-            Program.filosofosComFome -= 1;
-			Thread.Sleep( new Random().Next(10) * 10/HashiCount);
+            Program.filosofosPensando -= 1;
+			Thread.Sleep( new Random().Next(5) * 10/HashiCount);
 			Status = 'P';
-            Stop();
-            Program.filosofosComFome += 1;
+			Program.filosofosPensando += 1;
 			Program.filosofosComendo -= 1;
+            Stop();
             thread = new Thread(new ThreadStart(Eat));
 		}
 		

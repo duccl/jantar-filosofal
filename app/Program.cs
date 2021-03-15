@@ -7,7 +7,7 @@ namespace filosofos
     {
         public const int totalFilosofos = 5;
         public static int totalHashis = 5;
-        public static int filosofosComFome = 0;
+        public static int filosofosPensando = 0;
         public static int filosofosComendo = 0;
         public static void Main(string[] args)
         {
@@ -18,24 +18,39 @@ namespace filosofos
                 filosofos.Add(new Filosofo(i));
             }
             int ciclos = 1;
+            List<decimal> percentile = new List<decimal>();
             while (true)
             {
                 Console.Write($"iniciando ciclo {ciclos} ");
-                foreach (var filosofo in filosofos)
+                try
                 {
-                    if (Program.totalHashis > 1 && Program.filosofosComendo < 2)
+                    foreach (var filosofo in filosofos)
                     {
-                        filosofo.PegarHasi();
-                        filosofo.Start();
+                        if (Program.totalHashis > 1 && Program.filosofosComendo < 2)
+                        {
+                            filosofo.PegarHasi();
+                            filosofo.Start();
+                        }
+                        if (filosofo.Status == 'P')
+                        {
+                            filosofosPensando += 1;
+                        }
+                        Console.Write($"{filosofo} ");
                     }
-                    if (filosofo.Status == 'P') filosofosComFome += 1;
-                    Console.Write($"{filosofo} ");
+                    Console.WriteLine();
+                    percentile.Add( Program.filosofosPensando / Program.filosofosComendo );
+                    if (Program.filosofosPensando == totalFilosofos) break;
+                    ciclos += 1;
+                    filosofosPensando = 0;
                 }
-                Console.WriteLine();
-                if (Program.filosofosComFome == totalFilosofos) break;
-                ciclos += 1;
+                catch{
+                    break;
+                }
             }
-            Console.WriteLine(ciclos);
+            for (int i = 0; i < percentile.Count; i++)
+            {
+                Console.WriteLine($"ciclo: {i + 1} || percentile tpensando/tcomendo: {percentile[i]} ");
+            }
         }
     }
 }
