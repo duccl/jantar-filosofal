@@ -21,18 +21,21 @@ namespace filosofos
             List<decimal> percentile = new List<decimal>();
             while (true)
             {
-                Console.Write($"iniciando ciclo {ciclos} ");
                 try
                 {
+                    Filosofo lastToEat = null;
                     foreach (var filosofo in filosofos)
                     {
                         if (Program.totalHashis > 1 && Program.filosofosComendo < 2)
                         {
                             filosofo.PegarHasi();
+                            lastToEat = filosofo;
                             filosofo.Start();
+                            continue;
                         }
                         if (filosofo.Status == 'P')
                         {
+                            filosofo.Wait(lastToEat);
                             filosofosPensando += 1;
                         }
                         Console.Write($"{filosofo} ");
